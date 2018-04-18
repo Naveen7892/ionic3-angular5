@@ -1,0 +1,136 @@
+https://www.djamware.com/post/59fc9da680aca7739224ee20/ionic-3-and-angular-5-mobile-app-example
+
+
+-----------------------
+[
+>> sudo npm install -g ionic@latest
+]
+
+>> ionic start ionic3-angular5 blank
+
+>> cd ./ionic3-angular5
+
+>> ionic serve -l
+
+-----------------------
+[
+>> npm install —save @angular/{cli,common,compiler,compiler-cli,core,forms,http,platform-browser,platform-browser,platform-browser-dynamic}@next rxjs@'^5.5.2'
+>> npm install —save-dev typescript@2.4.2
+]
+
+>> npm install --save @angular/tsc-wrapped
+
+>> ionic serve -l
+
+-----------------------
+>> ionic g provider rest
+
+In rest.ts:
+
+import { HttpClient } from '@angular/common/http';
+// import { HttpModule } from '@angular/http';
+
+import { Injectable } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable';
+import { map, catchError } from 'rxjs/operators';
+/*
+  Generated class for the RestProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+@Injectable()
+export class RestProvider {
+
+  private apiUrl = 'https://restcountries.eu/rest/v2/all';
+
+  constructor(public http: HttpClient) {
+    console.log('Hello RestProvider Provider');
+  }
+
+  getCountries(): Observable<{}> {
+    return this.http.get(this.apiUrl).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+  
+  private extractData(res: Response) {
+    let body = res;
+    return body || { };
+  }
+  
+  private handleError (error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const err = error || '';
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Observable.throw(errMsg);
+  }
+
+}
+
+------------------------------------------------
+home.ts:
+
+import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
+import { RestProvider } from '../../providers/rest/rest';
+
+@Component({
+  selector: 'page-home',
+  templateUrl: 'home.html'
+})
+export class HomePage {
+
+  countries: any;
+  errorMessage: string;
+
+  constructor(public navCtrl: NavController, public rest: RestProvider) {
+
+  }
+
+  ionViewDidLoad() {
+    this.getCountries();
+  }
+
+  getCountries() {
+    this.rest.getCountries()
+       .subscribe(
+         countries => this.countries = countries,
+         error =>  this.errorMessage = <any>error);
+  }
+
+}
+-----------------------------------------------------------------------
+home.html:
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let c of countries">
+      <ion-avatar item-left>
+        <img src="{{c.flag}}">
+      </ion-avatar>
+      <h2>{{c.name}}</h2>
+      <p>Capital: {{c.capital}}, Region: {{c.region}}</p>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+---------------------------------------------------------------------
+>> ionic serve -l
+
+
+----------------------------------------------------------------------
+[ 
+>> sudo npm install -g cordova 
+]
+
+>> ionic cordova platform add android
+
+>> ionic cordova build android
