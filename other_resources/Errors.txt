@@ -1,0 +1,9 @@
+No provider for HttpClient
+
+SOLUTION:
+- https://stackoverflow.com/questions/47236963/no-provider-for-httpclient?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
+In app.module.ts:
+
+- import { HttpClientModule } from '@angular/common/http'; 
+- import:[HttpClientModule, ... ]
