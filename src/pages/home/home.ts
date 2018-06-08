@@ -3,6 +3,8 @@ import { NavController } from 'ionic-angular';
 
 import { RestProvider } from '../../providers/rest/rest';
 
+import wandxApi from '../../../node_modules/wandx-api/index';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -18,6 +20,11 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.getCountries();
+    console.dir(wandxApi);
+    var tradeHistory = wandxApi.tradeHistory;
+    var init = wandxApi.init;
+    init.setToken("xyz");
+    tradeHistory.getHourlyTradeHistory("GNT");
   }
 
   getCountries() {
@@ -26,4 +33,6 @@ export class HomePage {
          countries => this.countries = countries,
          error =>  this.errorMessage = <any>error);
   }
+
+
 }

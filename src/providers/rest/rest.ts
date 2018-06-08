@@ -5,6 +5,8 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { map, catchError } from 'rxjs/operators';
+
+import { wandxApi } from 'wandx-api';
 /*
   Generated class for the RestProvider provider.
 
@@ -26,6 +28,10 @@ export class RestProvider {
       catchError(this.handleError)
     );
   }
+
+  // testWandx():Observable<{}> {
+  //   return 
+  // }
   
   private extractData(res: Response) {
     let body = res;
